@@ -118,36 +118,53 @@ class DoublyLinkedList {
         void deleteFirst() {
             if (length == 0) return;
             if (length == 1) {
+                Node* temp = head;
                 head = nullptr;
                 tail = nullptr;
+                delete temp;
+                length = 0;
                 return;
             }
             Node* temp = head;
             head = head->next;
             head->prev = nullptr;
             delete temp;
+            length--;
         }
 
         void deleteLast() {
             if (length == 0) return;
             if (length == 1) {
+                Node* temp = head;
                 head = nullptr;
                 tail = nullptr;
+                delete temp;
+                length = 0;
                 return;
             }
             Node* temp = tail;
             tail = tail->prev;
             tail->next = nullptr;
+
             delete temp;
+            length--;
         }
 
-        bool remove(int index) {
+        bool deleteNode(int index) {
             if (length == 0 || index < 0 || index >= length) return false;
             if (length == 1) {
                 Node* temp = head;
                 head = nullptr;
                 tail = nullptr;
                 delete temp;
+                return true;
+            }
+
+            if (index == 0) {
+                deleteFirst();
+                return true;
+            } else if (index == length - 1) {
+                deleteLast();
                 return true;
             }
 
@@ -158,6 +175,7 @@ class DoublyLinkedList {
             current->prev->next = current->next;
 
             delete current;
+            length--;
             return true;
         }
 
@@ -175,17 +193,98 @@ class DoublyLinkedList {
                 temp = oldNext;
             }
         }
+
+        bool isPalindrome() {
+            if (length <= 1) return true;
+
+            Node* left = head;
+            Node* right = tail;
+
+            for (int i = 0; i < length / 2; i++) {
+                if (left->value == right->value) return true;
+                left = left->next;
+                right = right->prev;
+            }
+
+            return false;
+        }
+
+        void swapPairs() {
+            if (length < 2) return;
+            Node* current = head; // for swapping values
+
+            while (current) {
+                Node* left = current;
+                Node* right = current->next;
+                if (!right) return;
+
+                int temp = left->value;
+                left->value = right->value;
+                right->value = temp;
+
+                current = right->next;
+            }
+            // Node* current = head; // Failure ;-; for swapping nodes 
+            // Node* cursor = head->next;
+
+            // while (current && cursor) {
+            //     Node* nextPair = cursor->next;
+
+            //     current->next = cursor->next;
+            //     cursor->next->prev = current;
+            //     cursor->next = current;
+
+            //     if (current->next == nullptr) tail = current; 
+
+            //     Node* temp = current->prev;
+            //     current->prev = cursor;
+            //     cursor->prev = temp;
+            //     temp->next = cursor;
+
+            //     if (cursor->prev == nullptr) head = cursor;
+                
+            //     current = nextPair;
+            //     cursor = current->next;
+            // }
+        }
+
+        void swapQuadruples() {
+            if (length < 4) return;
+
+            Node* current = head;
+
+            while (current) {
+                Node* left = current;
+                Node* right = left->next;
+                if (!right) return;
+
+                Node* nLeft = right->next;
+                if (!nLeft) return;
+                Node* nRight = nLeft->next;
+                if (!nRight) return;
+
+                int temp = left->value;
+                left->value = nLeft->value;
+                nLeft->value = temp;
+
+                temp = right->value;
+                right->value = nRight->value;
+                nRight->value = temp;
+
+                current = nRight->next;
+            }
+        }
 };
 
 int main() {
     int _arr[1] = {2};
     DoublyLinkedList* myDLL = new DoublyLinkedList(_arr, 1);
-    // Test out the insertion commands
     myDLL->append(4);
     myDLL->prepend(1);
     myDLL->insert(2, 3);
     myDLL->reverse();
     myDLL->set(2, 5);
+    myDLL->swapPairs();
     myDLL->printList();
     return 0;
 }
