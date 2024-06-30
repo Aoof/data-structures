@@ -1,3 +1,6 @@
-manhal-courses
+./manhal-courses
 !*/
 !*.cpp
+
+.DS_Store
+.vscode
