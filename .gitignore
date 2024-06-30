@@ -1,6 +1,10 @@
-./manhal-courses
+*
+
 !*/
 !*.cpp
+!*.h
+!.gitignore
 
+./manhal-courses
 .DS_Store
 .vscode
